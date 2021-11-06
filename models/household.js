@@ -1,11 +1,12 @@
 const mongoose = require('mongoose')
 
+// Set schema
 const householdSchema = mongoose.Schema({
-    title: String,
-    author: String,
-    users: []
+    name: String,
+    date_created: Date,
 })
 
+// Transform the data returned when fetching documents
 householdSchema.set('toJSON', {
     transform: (document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString()
