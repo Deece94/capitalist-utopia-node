@@ -4,6 +4,27 @@ const mongoose = require('mongoose')
 const jobSchema = mongoose.Schema({
     name: String,
     date_created: Date,
+    bids: [
+        new mongoose.Schema({
+            user: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'user'
+            },
+            bid: Number
+        })
+    ],
+    winner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'jobBoard'
+    },
+    price: Number,
+    completion: [Boolean],
+    jobBoard: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'jobBoard'
+    },
+
+
 })
 
 // Transform the data returned when fetching documents
