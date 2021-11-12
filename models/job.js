@@ -15,7 +15,7 @@ const jobSchema = mongoose.Schema({
     ],
     winner: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'jobBoard'
+        ref: 'user'
     },
     price: Number,
     completion: [Boolean],
