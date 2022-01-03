@@ -1,11 +1,11 @@
 const usersRouter = require('express').Router();
-const JobBoard = require('../models/job');
+const User = require('../models/user');
 
 usersRouter.get('/', async (request, response, next) => {
     try {
-        JobBoard.find({}).then(jobBoards => {
-            if (jobBoards) {
-                response.json(jobBoards);
+        User.find({}).then(users => {
+            if (users) {
+                response.json(users);
             } else {
                 response.status(404).end();
             }
@@ -22,9 +22,9 @@ usersRouter.get('/', async (request, response, next) => {
 
 usersRouter.get('/:id', async (request, response, next) => {
     try {
-        JobBoard.findById(request.params.id).then(jobBoard => {
-            if (jobBoard) {
-                response.json(jobBoard);
+        User.findById(request.params.id).then(user => {
+            if (user) {
+                response.json(user);
             } else {
                 response.status(404).end();
             }
@@ -49,13 +49,13 @@ usersRouter.post('/', async (request, response, next) => {
             })
         }
 
-        const jobBoard = new JobBoard({
+        const user = new User({
             name: body.name,
             date_created: new Date(),
         })
 
-        jobBoard.save().then(savedJobBoard => {
-            response.json(savedJobBoard)
+        user.save().then(savedUser => {
+            response.json(savedUser)
         })
         .catch(error => next(error))
     } catch (error) {
@@ -69,7 +69,7 @@ usersRouter.post('/', async (request, response, next) => {
 
 usersRouter.delete('/:id', async (request, response, next) => {
     try {
-        JobBoard.findByIdAndRemove(request.params.id)
+        User.findByIdAndRemove(request.params.id)
             .then(result => {
                 response.status(204).end()
             })
@@ -86,16 +86,16 @@ usersRouter.put('/:id', async (request, response, next) => {
     try {
         const body = request.body
 
-        const jobBoard = {
+        const user = {
             name: body.name,
             date_created: new Date()
         }
 
-        JobBoard.findByIdAndUpdate(request.params.id, jobBoard, {
+        User.findByIdAndUpdate(request.params.id, user, {
                 new: true
             })
-            .then(updatedJobBoard => {
-                response.json(updatedJobBoard)
+            .then(updatedUser => {
+                response.json(updatedUser)
             })
             .catch(error => next(error))
     } catch (error) {
