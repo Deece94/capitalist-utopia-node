@@ -3,7 +3,8 @@ const mongoose = require('mongoose')
 // Set schema
 const jobSchema = mongoose.Schema({
     name: String,
-    date_created: Date,
+    description: String,
+    dateCreated: Date,
     bids: [
         new mongoose.Schema({
             user: {
@@ -18,6 +19,10 @@ const jobSchema = mongoose.Schema({
         ref: 'user'
     },
     price: Number,
+    frequency: {
+        type: String,
+        enum: ["weekly, fortnightly, monthly"]
+    },
     completion: [Boolean],
     jobBoard: {
         type: mongoose.Schema.Types.ObjectId,

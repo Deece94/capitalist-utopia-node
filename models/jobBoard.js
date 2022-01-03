@@ -2,8 +2,13 @@ const mongoose = require('mongoose')
 
 // Set schema
 const jobBoardSchema = mongoose.Schema({
-    name: String,
-    date_created: Date,
+    name: String, 
+    startDate: Date,
+    status: {
+        type: String,
+        enum: ["bidding", "active", "complete"]
+    },
+
 })
 
 // Transform the data returned when fetching documents
