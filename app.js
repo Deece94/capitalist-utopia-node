@@ -1,51 +1,45 @@
-// Load dependencies
-const express = require('express');
-const morgan = require('morgan');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const householdsRouter = require('./controllers/households.js');
-require('dotenv').config();
+// Load config variables
+const config = require('./utils/config');
 
+// Load express app
+const express = require('express');
 const app = express();
 
+
+
 // Set up json parsing for express
+const cors = require('cors');
 app.use(cors());
 app.use(express.json());
 
-// Set up morgan middleware
+// Set up morgan logging
+const morgan = require('morgan');
 app.use(morgan('tiny'));
 
 // Set up MongoDB connection
-mongoose.connect(process.env.MONGODB_URI, {
+const mongoose = require('mongoose');
+mongoose.connect(config.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
 
+// Load routers
+const householdsRouter = require('./controllers/households.js');
+const loginRouter = require('./controllers/login.js');
+const registerRouter = require('./controllers/register.js');
+
 // Load controllers
 app.use('/api/households', householdsRouter);
+app.use('/api/login', loginRouter);
+app.use('/api/register', registerRouter);
 
-// Handler of requests with unknown endpoint
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' });
-}
-
-app.use(unknownEndpoint);
-
-// handler of requests with result to errors
-const errorHandler = (error, request, response, next) => {
-  console.error(error.message);
-
-  if (error.name === 'CastError') {
-    return response.status(400).send({ error: 'malformatted id' });
-  } 
-
-  next(error);
-}
-
-app.use(errorHandler);
+// Load middleware
+const middleware = require('./utils/middleware');
+app.use(middleware.unknownEndpoint);
+app.use(middleware.errorHandler);
 
 // Set up app to listen to port number (default 3001)
-const PORT = process.env.PORT || 3001;
+const PORT = config.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 })
