@@ -1,11 +1,11 @@
-const householdsRouter = require('express').Router();
-const Household = require('../models/household');
+const jobsRouter = require('express').Router();
+const Job = require('../models/job');
 
-householdsRouter.get('/', async (request, response, next) => {
+jobsRouter.get('/', async (request, response, next) => {
     try {
-        Household.find({}).then(households => {
-            if (households) {
-                response.json(households);
+        Job.find({}).then(jobs => {
+            if (jobs) {
+                response.json(jobs);
             } else {
                 response.status(404).end();
             }
@@ -20,11 +20,11 @@ householdsRouter.get('/', async (request, response, next) => {
 
 })
 
-householdsRouter.get('/:id', async (request, response, next) => {
+jobsRouter.get('/:id', async (request, response, next) => {
     try {
-        Household.findById(request.params.id).then(household => {
-            if (household) {
-                response.json(household);
+        Job.findById(request.params.id).then(job => {
+            if (job) {
+                response.json(job);
             } else {
                 response.status(404).end();
             }
@@ -39,7 +39,7 @@ householdsRouter.get('/:id', async (request, response, next) => {
 
 })
 
-householdsRouter.post('/', async (request, response, next) => {
+jobsRouter.post('/', async (request, response, next) => {
     try {
         const body = request.body;
 
@@ -49,13 +49,13 @@ householdsRouter.post('/', async (request, response, next) => {
             })
         }
 
-        const household = new Household({
+        const job = new Job({
             name: body.name,
             date_created: new Date(),
         })
 
-        household.save().then(savedHousehold => {
-            response.json(savedHousehold)
+        job.save().then(savedJob => {
+            response.json(savedJob)
         })
         .catch(error => next(error))
     } catch (error) {
@@ -67,9 +67,9 @@ householdsRouter.post('/', async (request, response, next) => {
 
 })
 
-householdsRouter.delete('/:id', async (request, response, next) => {
+jobsRouter.delete('/:id', async (request, response, next) => {
     try {
-        Household.findByIdAndRemove(request.params.id)
+        Job.findByIdAndRemove(request.params.id)
             .then(result => {
                 response.status(204).end()
             })
@@ -82,20 +82,20 @@ householdsRouter.delete('/:id', async (request, response, next) => {
     }
 })
 
-householdsRouter.put('/:id', async (request, response, next) => {
+jobsRouter.put('/:id', async (request, response, next) => {
     try {
         const body = request.body
 
-        const household = {
+        const job = {
             name: body.name,
             date_created: new Date()
         }
 
-        Household.findByIdAndUpdate(request.params.id, household, {
+        Job.findByIdAndUpdate(request.params.id, job, {
                 new: true
             })
-            .then(updatedhousehold => {
-                response.json(updatedhousehold)
+            .then(updatedJob => {
+                response.json(updatedJob)
             })
             .catch(error => next(error))
     } catch (error) {
@@ -106,4 +106,4 @@ householdsRouter.put('/:id', async (request, response, next) => {
     }
 })
 
-module.exports = householdsRouter
+module.exports = jobsRouter

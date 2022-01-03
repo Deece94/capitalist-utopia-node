@@ -1,11 +1,11 @@
-const householdsRouter = require('express').Router();
-const Household = require('../models/household');
+const jobBoardsRouter = require('express').Router();
+const JobBoard = require('../models/job');
 
-householdsRouter.get('/', async (request, response, next) => {
+jobBoardsRouter.get('/', async (request, response, next) => {
     try {
-        Household.find({}).then(households => {
-            if (households) {
-                response.json(households);
+        JobBoard.find({}).then(jobBoards => {
+            if (jobBoards) {
+                response.json(jobBoards);
             } else {
                 response.status(404).end();
             }
@@ -20,11 +20,11 @@ householdsRouter.get('/', async (request, response, next) => {
 
 })
 
-householdsRouter.get('/:id', async (request, response, next) => {
+jobBoardsRouter.get('/:id', async (request, response, next) => {
     try {
-        Household.findById(request.params.id).then(household => {
-            if (household) {
-                response.json(household);
+        JobBoard.findById(request.params.id).then(jobBoard => {
+            if (jobBoard) {
+                response.json(jobBoard);
             } else {
                 response.status(404).end();
             }
@@ -39,7 +39,7 @@ householdsRouter.get('/:id', async (request, response, next) => {
 
 })
 
-householdsRouter.post('/', async (request, response, next) => {
+jobBoardsRouter.post('/', async (request, response, next) => {
     try {
         const body = request.body;
 
@@ -49,13 +49,13 @@ householdsRouter.post('/', async (request, response, next) => {
             })
         }
 
-        const household = new Household({
+        const jobBoard = new JobBoard({
             name: body.name,
             date_created: new Date(),
         })
 
-        household.save().then(savedHousehold => {
-            response.json(savedHousehold)
+        jobBoard.save().then(savedJobBoard => {
+            response.json(savedJobBoard)
         })
         .catch(error => next(error))
     } catch (error) {
@@ -67,9 +67,9 @@ householdsRouter.post('/', async (request, response, next) => {
 
 })
 
-householdsRouter.delete('/:id', async (request, response, next) => {
+jobBoardsRouter.delete('/:id', async (request, response, next) => {
     try {
-        Household.findByIdAndRemove(request.params.id)
+        JobBoard.findByIdAndRemove(request.params.id)
             .then(result => {
                 response.status(204).end()
             })
@@ -82,20 +82,20 @@ householdsRouter.delete('/:id', async (request, response, next) => {
     }
 })
 
-householdsRouter.put('/:id', async (request, response, next) => {
+jobBoardsRouter.put('/:id', async (request, response, next) => {
     try {
         const body = request.body
 
-        const household = {
+        const jobBoard = {
             name: body.name,
             date_created: new Date()
         }
 
-        Household.findByIdAndUpdate(request.params.id, household, {
+        JobBoard.findByIdAndUpdate(request.params.id, jobBoard, {
                 new: true
             })
-            .then(updatedhousehold => {
-                response.json(updatedhousehold)
+            .then(updatedJobBoard => {
+                response.json(updatedJobBoard)
             })
             .catch(error => next(error))
     } catch (error) {
@@ -106,4 +106,4 @@ householdsRouter.put('/:id', async (request, response, next) => {
     }
 })
 
-module.exports = householdsRouter
+module.exports = jobBoardsRouter

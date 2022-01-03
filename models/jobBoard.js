@@ -1,13 +1,18 @@
 const mongoose = require('mongoose')
 
 // Set schema
-const householdSchema = mongoose.Schema({
-    name: String,
-    date_created: Date,
+const jobBoardSchema = mongoose.Schema({
+    name: String, 
+    startDate: Date,
+    status: {
+        type: String,
+        enum: ["bidding", "active", "complete"]
+    },
+
 })
 
 // Transform the data returned when fetching documents
-householdSchema.set('toJSON', {
+jobBoardSchema.set('toJSON', {
     transform: (document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString()
         delete returnedObject._id
@@ -15,4 +20,4 @@ householdSchema.set('toJSON', {
     }
 })
 
-module.exports = mongoose.model('Household', householdSchema)
+module.exports = mongoose.model('JobBoard', jobBoardSchema)

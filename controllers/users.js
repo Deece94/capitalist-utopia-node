@@ -1,11 +1,11 @@
-const householdsRouter = require('express').Router();
-const Household = require('../models/household');
+const usersRouter = require('express').Router();
+const User = require('../models/user');
 
-householdsRouter.get('/', async (request, response, next) => {
+usersRouter.get('/', async (request, response, next) => {
     try {
-        Household.find({}).then(households => {
-            if (households) {
-                response.json(households);
+        User.find({}).then(users => {
+            if (users) {
+                response.json(users);
             } else {
                 response.status(404).end();
             }
@@ -20,11 +20,11 @@ householdsRouter.get('/', async (request, response, next) => {
 
 })
 
-householdsRouter.get('/:id', async (request, response, next) => {
+usersRouter.get('/:id', async (request, response, next) => {
     try {
-        Household.findById(request.params.id).then(household => {
-            if (household) {
-                response.json(household);
+        User.findById(request.params.id).then(user => {
+            if (user) {
+                response.json(user);
             } else {
                 response.status(404).end();
             }
@@ -39,7 +39,7 @@ householdsRouter.get('/:id', async (request, response, next) => {
 
 })
 
-householdsRouter.post('/', async (request, response, next) => {
+usersRouter.post('/', async (request, response, next) => {
     try {
         const body = request.body;
 
@@ -49,13 +49,13 @@ householdsRouter.post('/', async (request, response, next) => {
             })
         }
 
-        const household = new Household({
+        const user = new User({
             name: body.name,
             date_created: new Date(),
         })
 
-        household.save().then(savedHousehold => {
-            response.json(savedHousehold)
+        user.save().then(savedUser => {
+            response.json(savedUser)
         })
         .catch(error => next(error))
     } catch (error) {
@@ -67,9 +67,9 @@ householdsRouter.post('/', async (request, response, next) => {
 
 })
 
-householdsRouter.delete('/:id', async (request, response, next) => {
+usersRouter.delete('/:id', async (request, response, next) => {
     try {
-        Household.findByIdAndRemove(request.params.id)
+        User.findByIdAndRemove(request.params.id)
             .then(result => {
                 response.status(204).end()
             })
@@ -82,20 +82,20 @@ householdsRouter.delete('/:id', async (request, response, next) => {
     }
 })
 
-householdsRouter.put('/:id', async (request, response, next) => {
+usersRouter.put('/:id', async (request, response, next) => {
     try {
         const body = request.body
 
-        const household = {
+        const user = {
             name: body.name,
             date_created: new Date()
         }
 
-        Household.findByIdAndUpdate(request.params.id, household, {
+        User.findByIdAndUpdate(request.params.id, user, {
                 new: true
             })
-            .then(updatedhousehold => {
-                response.json(updatedhousehold)
+            .then(updatedUser => {
+                response.json(updatedUser)
             })
             .catch(error => next(error))
     } catch (error) {
@@ -106,4 +106,4 @@ householdsRouter.put('/:id', async (request, response, next) => {
     }
 })
 
-module.exports = householdsRouter
+module.exports = usersRouter
