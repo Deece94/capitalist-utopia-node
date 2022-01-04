@@ -1,40 +1,40 @@
-// Load config variables
 const config = require('./utils/config');
+const express = require('express');
+const cors = require('cors');
+const morgan = require('morgan');
+const mongoose = require('mongoose');
+const householdsRouter = require('./controllers/households.js');
+const loginRouter = require('./controllers/login.js');
+const registerRouter = require('./controllers/register.js');
+const middleware = require('./utils/middleware');
 
 // Load express app
-const express = require('express');
 const app = express();
 
 
-
 // Set up json parsing for express
-const cors = require('cors');
 app.use(cors());
 app.use(express.json());
 
 // Set up morgan logging
-const morgan = require('morgan');
 app.use(morgan('tiny'));
 
 // Set up MongoDB connection
-const mongoose = require('mongoose');
 mongoose.connect(config.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
 
-// Load routers
-const householdsRouter = require('./controllers/households.js');
-const loginRouter = require('./controllers/login.js');
-const registerRouter = require('./controllers/register.js');
+// Load authentications middleware
+app.use(middleware.authVerifier);
+
 
 // Load controllers
-app.use('/api/households', householdsRouter);
-app.use('/api/login', loginRouter);
-app.use('/api/register', registerRouter);
+app.use('/households', householdsRouter);
+app.use('/login', loginRouter);
+app.use('/register', registerRouter);
 
-// Load middleware
-const middleware = require('./utils/middleware');
+// Load error handlinbg middleware
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
 
